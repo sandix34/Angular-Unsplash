@@ -1,5 +1,5 @@
 import { User } from '../../models/user.model';
-import { Action } from '@ngrx/store';
+import { AuthActions } from '../actions/auth.actions';
 
 export interface AuthState {
   user: User;
@@ -8,6 +8,6 @@ export interface AuthState {
   isLoggedin: boolean;
 };
 
-export function authReducer(state: AuthState, action: Action) {
+export function authReducer(state: AuthState, action: AuthActions) {
   return state;
 }
