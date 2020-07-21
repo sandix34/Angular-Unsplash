@@ -1,13 +1,28 @@
 import { User } from '../../models/user.model';
-import { AuthActions } from '../actions/auth.actions';
+import { AuthActions, AuthActionTypes } from '../actions/auth.actions';
 
 export interface AuthState {
   user: User;
   token: string;
   error: string;
-  isLoggedin: boolean;
+  isLoggedIn: boolean;
 };
 
-export function authReducer(state: AuthState, action: AuthActions) {
+export const initialAuthState: AuthState = {
+  user: null,
+  token: null,
+  isLoggedIn: false,
+  error: null
+};
+
+export function authReducer(state: AuthState = initialAuthState, action: AuthActions) {
+  switch (action.type) {
+    case AuthActionTypes.SignupError: {
+      return {
+        ...state,
+        error: action.payload
+      };
+    }
+  }
   return state;
 }

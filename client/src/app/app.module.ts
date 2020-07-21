@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducersMap } from './shared/store';
+import { AuthEffects } from './shared/store/effects/auth.effects';
 
 // components
 import { AppComponent } from './app.component';
@@ -32,7 +33,7 @@ import { AppRoutingModule } from './app.routing';
     RouterModule,
     CoreModule,
     StoreModule.forRoot(reducersMap),
-    //EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   bootstrap: [AppComponent]
