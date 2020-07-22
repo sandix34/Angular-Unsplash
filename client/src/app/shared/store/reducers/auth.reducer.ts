@@ -17,6 +17,8 @@ export const initialAuthState: AuthState = {
 
 export function authReducer(state: AuthState = initialAuthState, action: AuthActions) {
   switch (action.type) {
+    // possibilité de lier les 2 cas pour une même modification
+    case AuthActionTypes.SigninError:
     case AuthActionTypes.SignupError: {
       return {
         ...state,
