@@ -25,6 +25,14 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
         error: action.payload
       };
     }
+    case AuthActionTypes.SigninSuccess: {
+      return {
+        ...state,
+        token: action.payload,
+        isLoggedIn: true,
+        error: null
+      };
+    }
   }
   return state;
 }
