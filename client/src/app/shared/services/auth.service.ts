@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { tap, switchMap } from 'rxjs/operators';
 import { JwtToken } from '../models/JwtToken.model';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { State } from '../store';
+import { TryRefreshToken } from '../store/actions/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +18,13 @@ export class AuthService {
     isAuthenticated: null,
     token: null
   });
-  subscription: Subscription;
 
-  constructor(private http: HttpClient, private router: Router) { 
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private store: Store<State>
+    ) { 
     this.initToken();
-    this.subscription = this.initTimer();
   }
 
   public signup(user: User): Observable<User> {
@@ -31,33 +36,18 @@ export class AuthService {
   }
 
 
-  public initTimer() {
-  return timer(2000, 5000).pipe(
-    switchMap(() => {
-      if (localStorage.getItem('jwt')) {
-        return this.http.get<string>('/api/auth/refresh-token').pipe(
-          tap((token: string) => {
-            this.jwtToken.next({
-              isAuthenticated: true,
-              token: token
-            });
-            localStorage.setItem('jwt', token);
-          })
-        );
-      } else {
-        this.subscription.unsubscribe();
-        return of(null);
-      }
-    })
-  ).subscribe(() => {}, err => {
-    this.jwtToken.next({
-      isAuthenticated: false,
-      token: null
-    });
-    localStorage.removeItem('jwt');
-    this.subscription.unsubscribe();
-  });
-}
+  public initRefreshToken() {
+    return timer(2000, 5000).pipe(
+      tap( () => {
+        this.store.dispatch(new TryRefreshToken())
+      })
+    )
+  }
+
+  // effectue la requête pour rafraîchir le token
+  public refreshToken() {
+    return this.http.get<string>('api/auth/refresh-token');
+  }
 
   private initToken(): void {
     const token = localStorage.getItem('jwt');

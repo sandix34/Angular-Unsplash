@@ -10,13 +10,14 @@ import {
   SigninSuccess, 
   SigninError 
 } from "../actions/auth.actions";
-import { map, exhaustMap, catchError, tap } from "rxjs/operators";
+import { map, exhaustMap, catchError, tap, switchMap } from "rxjs/operators";
 import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
-import { of } from "rxjs";
+import { of, Subscription } from "rxjs";
 
 @Injectable()
 export class AuthEffects {
+  subscription: Subscription;
 
   @Effect()
   trySignup$ = this.actions$.pipe(
@@ -49,6 +50,35 @@ export class AuthEffects {
           catchError(error => of(new SigninError(error)))
         )
     )
+  );
+
+  // sauvegarde le token dans le cas où la connexion a fonctionné et déclenche le rafraîchissement du token
+  @Effect({ dispatch: false })
+  signinSuccess$ = this.actions$.pipe(
+    ofType(AuthActionTypes.SigninSuccess),
+    map( (action: SigninSuccess) => action.payload),
+    tap((token) => {
+      localStorage.setItem('token', token);
+      if (!this.subscription) {
+        this.subscription = this.authService.initRefreshToken().subscribe();
+        this.router.navigate(['/']);
+      }
+    })
+  );
+
+  // déclenche la requête Http lorsqu'il reçoit une action de type TryRefreshToken
+  @Effect()
+  tryRefreshToken$ = this.actions$.pipe(
+    ofType(AuthActionTypes.TryRefreshToken),
+    switchMap(() => this.authService.refreshToken().pipe(
+      map(token => {
+        return new SigninSuccess(token);
+      }),
+      catchError(() => {
+        localStorage.removeItem('token');
+        return of(null);
+      })
+    ))
   );
 
   constructor(

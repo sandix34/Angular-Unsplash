@@ -10,6 +10,7 @@ export enum AuthActionTypes {
   SigninError = "[ User ] - Signin error",
   TryFetchUser = "[ User ] - Try Fetch User",
   SetCurrentUser = "[ User ] - Set current User",
+  TryRefreshToken = '[ User ] - Try refresh token',
 }
 
 export class TrySignup implements Action {
@@ -51,6 +52,10 @@ export class SetCurrentUser implements Action {
   constructor(public payload: User) {}
 }
 
+export class TryRefreshToken implements Action {
+  readonly type = AuthActionTypes.TryRefreshToken;
+}
+
 export type AuthActions =
   | TrySignup
   | SignupSuccess
@@ -59,4 +64,5 @@ export type AuthActions =
   | SigninSuccess
   | SigninError
   | TryFetchCurrentUser
-  | SetCurrentUser;
+  | SetCurrentUser
+  | TryRefreshToken
