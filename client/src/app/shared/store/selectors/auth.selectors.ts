@@ -5,3 +5,5 @@ import { AuthState } from '../reducers/auth.reducer';
 export const authSelector = createFeatureSelector('auth');
 // retourne la propriété error sur l'état AuthState
 export const errorAuthSelector = createSelector(authSelector, (authState: AuthState) => authState.error);
+// retourne la propriété error sur l'état AuthState
+export const tokenSelector = createSelector(authSelector, (authState: AuthState) => authState.token);

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AuthService } from '../../shared/services/auth.service';
-import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { State } from 'src/app/shared/store';
+import { TrySignin } from 'src/app/shared/store/actions/auth.actions';
+import { Observable } from 'rxjs';
+import { errorAuthSelector } from 'src/app/shared/store/selectors/auth.selectors';
 
 @Component({
   selector: 'app-signin',
@@ -10,12 +13,11 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
   public signinForm: FormGroup;
-  public error: string;
+  public error$: Observable<string>;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private store: Store<State>
   ) { }
 
   ngOnInit() {
@@ -23,13 +25,13 @@ export class SigninComponent implements OnInit {
       email: [''],
       password: ['']
     });
+
+    this.error$ = this.store.pipe(
+      select(errorAuthSelector)
+    );
   }
 
-  public trySignin() {
-    this.authService.signin(this.signinForm.value).subscribe( () => {
-      this.router.navigate(['/']);
-    }, err => {
-      this.error = err.error;
-    });
+  public submit(): void {
+    this.store.dispatch(new TrySignin(this.signinForm.value));
   }
 }
