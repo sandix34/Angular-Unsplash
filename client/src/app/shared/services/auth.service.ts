@@ -27,16 +27,7 @@ export class AuthService {
   }
 
   public signin(credentials: { email: string, password: string}): Observable<string> {
-    return this.http.post<string>('/api/auth/signin', credentials).pipe(
-      tap(( token: string ) => {
-        this.jwtToken.next({
-          isAuthenticated: true,
-          token: token
-        });
-        localStorage.setItem('jwt', token);
-        this.subscription = this.initTimer();
-      })
-    );
+    return this.http.post<string>('/api/auth/signin', credentials);
   }
 
 
