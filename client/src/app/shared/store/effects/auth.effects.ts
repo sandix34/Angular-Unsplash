@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { AuthActionTypes, TrySignup, SignupSuccess, SignupError } from "../actions/auth.actions";
+import { 
+  AuthActionTypes, 
+  TrySignup, 
+  SignupSuccess, 
+  SignupError, 
+  TrySignin, 
+  SigninSuccess, 
+  SigninError 
+} from "../actions/auth.actions";
 import { map, exhaustMap, catchError, tap } from "rxjs/operators";
 import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
@@ -9,6 +17,7 @@ import { of } from "rxjs";
 
 @Injectable()
 export class AuthEffects {
+
   @Effect()
   trySignup$ = this.actions$.pipe(
     ofType<TrySignup>(AuthActionTypes.TrySignup),
@@ -28,6 +37,18 @@ export class AuthEffects {
   signupSuccess$ = this.actions$.pipe(
     ofType(AuthActionTypes.SignupSuccess),
     tap(() => this.router.navigate(["/signin"]))
+  );
+
+  @Effect()
+  trySignin$ = this.actions$.pipe(
+    ofType<TrySignin>(AuthActionTypes.TrySignin),
+    map( (action: TrySignin) => action.payload),
+    exhaustMap((credentials: {email: string, password: string}) =>
+        this.authService.signin(credentials).pipe(
+          map(token => new SigninSuccess(token)),
+          catchError(error => of(new SigninError(error)))
+        )
+    )
   );
 
   constructor(
