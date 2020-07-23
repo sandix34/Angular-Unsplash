@@ -13,7 +13,7 @@ import {
 import { map, exhaustMap, catchError, tap, switchMap } from "rxjs/operators";
 import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
-import { of, Subscription } from "rxjs";
+import { of, Subscription, empty } from "rxjs";
 
 @Injectable()
 export class AuthEffects {
@@ -76,7 +76,10 @@ export class AuthEffects {
       }),
       catchError(() => {
         localStorage.removeItem('token');
-        return of(null);
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
+        return empty();
       })
     ))
   );
