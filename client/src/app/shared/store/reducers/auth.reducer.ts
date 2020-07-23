@@ -33,6 +33,15 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
         error: null
       };
     }
+    case AuthActionTypes.Logout: {
+      return {
+        ...state,
+        token: null,
+        isLoggedIn: false,
+        error: null,
+        user: null
+      };
+    }
   }
   return state;
 }

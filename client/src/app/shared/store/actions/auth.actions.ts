@@ -11,6 +11,7 @@ export enum AuthActionTypes {
   TryFetchUser = "[ User ] - Try Fetch User",
   SetCurrentUser = "[ User ] - Set current User",
   TryRefreshToken = '[ User ] - Try refresh token',
+  Logout = '[ User ] - Logout',
 }
 
 export class TrySignup implements Action {
@@ -56,6 +57,10 @@ export class TryRefreshToken implements Action {
   readonly type = AuthActionTypes.TryRefreshToken;
 }
 
+export class Logout implements Action {
+  readonly type = AuthActionTypes.Logout;
+}
+
 export type AuthActions =
   | TrySignup
   | SignupSuccess
@@ -66,3 +71,4 @@ export type AuthActions =
   | TryFetchCurrentUser
   | SetCurrentUser
   | TryRefreshToken
+  | Logout
