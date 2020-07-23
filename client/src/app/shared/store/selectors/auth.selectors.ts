@@ -7,3 +7,5 @@ export const authSelector = createFeatureSelector('auth');
 export const errorAuthSelector = createSelector(authSelector, (authState: AuthState) => authState.error);
 // retourne la propriété error sur l'état AuthState
 export const tokenSelector = createSelector(authSelector, (authState: AuthState) => authState.token);
+// retourne la propriété isLoggedIn
+export const isLoggedInSelector = createSelector(authSelector, (authState: AuthState) => authState.isLoggedIn);
