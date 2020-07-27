@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from './shared/services/auth.service';
+import { Store } from '@ngrx/store';
+import { State } from './shared/store';
+import { TryRefreshToken } from './shared/store/actions/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +9,7 @@ import { AuthService } from './shared/services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private authservice: AuthService) {}
+  constructor(private store: Store<State>) {
+    this.store.dispatch(new TryRefreshToken());
+  }
 }
