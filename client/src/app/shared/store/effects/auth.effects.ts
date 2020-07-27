@@ -10,10 +10,13 @@ import {
   SigninSuccess, 
   SigninError 
 } from "../actions/auth.actions";
-import { map, exhaustMap, catchError, tap, switchMap } from "rxjs/operators";
+import { map, exhaustMap, catchError, tap, switchMap, withLatestFrom } from "rxjs/operators";
 import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
-import { of, Subscription, empty } from "rxjs";
+import { of, Subscription, empty, EMPTY } from "rxjs";
+import { select, Store } from '@ngrx/store';
+import { tokenSelector } from '../selectors/auth.selectors';
+import { State } from '..';
 
 @Injectable()
 export class AuthEffects {
@@ -70,23 +73,30 @@ export class AuthEffects {
   @Effect()
   tryRefreshToken$ = this.actions$.pipe(
     ofType(AuthActionTypes.TryRefreshToken),
-    switchMap(() => this.authService.refreshToken().pipe(
-      map(token => {
-        return new SigninSuccess(token);
-      }),
-      catchError(() => {
-        localStorage.removeItem('token');
-        if (this.subscription) {
-          this.subscription.unsubscribe();
-        }
-        return empty();
-      })
-    ))
+    // vérifier qu'il y a un token dans l'application
+    withLatestFrom(this.store.pipe(select(tokenSelector))),
+    switchMap(( [action, token] ) => {
+      // si token on le rafraîchit
+      if (token) {
+          return this.authService.refreshToken()
+            .pipe(
+                map(newToken => new SigninSuccess(newToken)),
+                catchError(() => {
+                  localStorage.removeItem('token');
+                  return EMPTY;
+                })
+              );
+      } else {
+        // retourne un observable avec une action avec un type non utilisé
+        return EMPTY;
+      }
+    })
   );
 
   constructor(
     private actions$: Actions,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store<State>
   ) {}
 }
