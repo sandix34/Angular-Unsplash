@@ -8,6 +8,6 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public getCurrentUser(): Observable<User> {
-    return this.http.get<User>('https://dyma-staging.fr:3000/api/user/current');
+    return this.http.get<User>('/api/user/current');
   }
 }

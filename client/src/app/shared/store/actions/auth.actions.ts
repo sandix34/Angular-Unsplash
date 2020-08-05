@@ -12,6 +12,7 @@ export enum AuthActionTypes {
   SetCurrentUser = "[ User ] - Set current User",
   TryRefreshToken = '[ User ] - Try refresh token',
   Logout = '[ User ] - Logout',
+  TryFetchCurrentUser = "[ User ] - Try fetch current user"
 }
 
 export class TrySignup implements Action {

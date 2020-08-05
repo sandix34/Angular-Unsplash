@@ -8,7 +8,8 @@ import {
   SignupError, 
   TrySignin, 
   SigninSuccess, 
-  SigninError 
+  SigninError, 
+  SetCurrentUser
 } from "../actions/auth.actions";
 import { map, exhaustMap, catchError, tap, switchMap, withLatestFrom } from "rxjs/operators";
 import { User } from "../../models/user.model";
@@ -17,6 +18,7 @@ import { of, Subscription, empty, EMPTY } from "rxjs";
 import { select, Store } from '@ngrx/store';
 import { tokenSelector } from '../selectors/auth.selectors';
 import { State } from '..';
+import { UserService } from '../../services/user.service';
 
 @Injectable()
 export class AuthEffects {
@@ -93,9 +95,22 @@ export class AuthEffects {
     })
   );
 
+  // récupérer l'utilisateur  
+  @Effect()
+  tryFetchCurrentUser$ = this.actions$.pipe(
+    ofType(AuthActionTypes.TryFetchCurrentUser),
+    switchMap(() => this.userService.getCurrentUser()),
+    map((user: User) => new SetCurrentUser(user)),
+    catchError((error: any) => {
+      console.log(error);
+      return EMPTY;
+    })
+  );
+
   constructor(
     private actions$: Actions,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private store: Store<State>
   ) {}
