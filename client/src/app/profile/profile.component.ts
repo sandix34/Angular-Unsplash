@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   constructor(private store: Store<State>) {}
 
   ngOnInit() {
-    // récupère l'utilisateur depuis le store avec un selector qui retourne un Obeservable
+    // récupère l'utilisateur depuis le store avec un selector qui retourne un Observable
     this.currentUser$ = this.store.pipe(select(currentUserSelector));
     // envoyer  une action qui déclenche la requête de récupération de l'utilisateur
     this.store.dispatch(new TryFetchCurrentUser());

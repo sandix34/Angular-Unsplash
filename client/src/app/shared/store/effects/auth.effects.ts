@@ -95,6 +95,19 @@ export class AuthEffects {
     })
   );
 
+  @Effect({ dispatch: false })
+  logout$ = this.actions$.pipe(
+    ofType(AuthActionTypes.Logout),
+    tap(() => {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+        this.subscription = null;
+      }
+      localStorage.removeItem('token');
+      this.router.navigate(['/']);
+    })
+  );
+
   // récupérer l'utilisateur  
   @Effect()
   tryFetchCurrentUser$ = this.actions$.pipe(
