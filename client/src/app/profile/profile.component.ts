@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { Store, select } from '@ngrx/store';
 import { State } from '../shared/store';
 import { TryFetchCurrentUser } from '../shared/store/actions/auth.actions';
+import { currentUserSelector } from '../shared/store/selectors/auth.selectors';
 
 @Component({
   selector: "app-profile",
