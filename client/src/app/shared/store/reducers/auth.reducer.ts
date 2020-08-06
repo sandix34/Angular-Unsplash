@@ -42,6 +42,12 @@ export function authReducer(state: AuthState = initialAuthState, action: AuthAct
         user: null
       };
     }
+    case AuthActionTypes.SetCurrentUser: {
+      return {
+        ...state,
+        user: action.payload
+      };
+    }
   }
   return state;
 }
