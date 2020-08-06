@@ -46,7 +46,7 @@ export class SigninError implements Action {
 }
 
 export class TryFetchCurrentUser implements Action {
-  readonly type = AuthActionTypes.TryFetchUser;
+  readonly type = AuthActionTypes.TryFetchCurrentUser;
 }
 
 export class SetCurrentUser implements Action {
