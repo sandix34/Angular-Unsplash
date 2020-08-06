@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { User } from "../shared/models/user.model";
-import { UserService } from "../shared/services/user.service";
 import { Observable } from "rxjs";
+import { Store, select } from '@ngrx/store';
+import { State } from '../shared/store';
+import { TryFetchCurrentUser } from '../shared/store/actions/auth.actions';
+import { currentUserSelector } from '../shared/store/selectors/auth.selectors';
 
 @Component({
   selector: "app-profile",
@@ -9,11 +12,14 @@ import { Observable } from "rxjs";
   styleUrls: ["./profile.component.css"],
 })
 export class ProfileComponent implements OnInit {
-  public currentUser: Observable<User>;
+  public currentUser$: Observable<User>;
 
-  constructor(private userService: UserService) {}
+  constructor(private store: Store<State>) {}
 
   ngOnInit() {
-    this.currentUser = this.userService.getCurrentUser();
+    // récupère l'utilisateur depuis le store avec un selector qui retourne un Observable
+    this.currentUser$ = this.store.pipe(select(currentUserSelector));
+    // envoyer  une action qui déclenche la requête de récupération de l'utilisateur
+    this.store.dispatch(new TryFetchCurrentUser());
   }
 }
