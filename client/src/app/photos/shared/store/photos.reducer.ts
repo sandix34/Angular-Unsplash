@@ -1,4 +1,4 @@
-import { PhotosActions } from './photos.actions';
+import { PhotosActions, PhotosActionTypes } from './photos.actions';
 
 export interface PhotosState {
   photos: any[];
@@ -11,5 +11,13 @@ export const initialPhotosState: PhotosState = {
 };
 
 export function photosReducer(state: PhotosState = initialPhotosState, action: PhotosActions): PhotosState {
+  switch (action.type) {
+    case PhotosActionTypes.SetFilter: {
+      return {
+        ...state,
+        filter: action.payload
+      }
+    }
+  }
   return state;
 }

@@ -6,6 +6,8 @@ import { PHOTOS_ROUTES } from './photos.routes';
 import { PhotosService } from './shared/services/photos.service';
 import { StoreModule } from '@ngrx/store';
 import { photosReducer } from './shared/store/photos.reducer';
+import { PhotosEffects } from './shared/store/photos.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 
 
@@ -15,7 +17,7 @@ import { photosReducer } from './shared/store/photos.reducer';
     LayoutModule,
     RouterModule.forChild(PHOTOS_ROUTES),
     StoreModule.forFeature('photos', photosReducer),
-    // EffectsModule.forFeature([])
+    EffectsModule.forFeature([PhotosEffects])
   ],
   providers: [PhotosService]
 })
