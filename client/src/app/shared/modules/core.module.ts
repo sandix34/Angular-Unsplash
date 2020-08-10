@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { LayoutModule } from './layout.module';
 
 // components
-import { HomepageComponent } from '../../components/homepage/homepage.component';
 import { SignupComponent } from '../../components/signup/signup.component';
 import { SigninComponent } from '../../components/signin/signin.component';
 import { TopbarComponent } from '../../shared/components/topbar/topbar.component';
@@ -22,7 +21,6 @@ import { AuthInterceptor } from '../interceptors/auth.interceptor';
 
 const COMPONENTS = [
   TopbarComponent,
-  HomepageComponent,
   SignupComponent,
   SigninComponent,
 ]
