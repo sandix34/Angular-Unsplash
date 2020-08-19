@@ -1,6 +1,14 @@
-<mat-toolbar color="primary" fxLayoutGap="15px">
-  <span class="link" routerLink="/" >Mon logo</span>
-  <input fxFlex="auto" type="text" (keyup)="applyFilter($event.target.value)">
+<mat-toolbar color="primary" fxLayoutGap="20px">
+  <span fxFlex="auto" class="link" routerLink="/" >Mon logo</span>
+  <form [formGroup]="searchForm">
+    <mat-form-field>
+      <input matInput formControlName="search" placeholder="search" type="text">  
+    </mat-form-field>
+    <button mat-mini-fab (click)="submit()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </form>
+    <!-- <input placeholder="Search" fxFlex="auto" type="text" (keyup)="applyFilter($event.target.value)">-->
   <span *ngIf="!(isLoggedIn$ | async)" fxLayoutGap="20px">
     <span class="link" routerLink="/signin" >Connexion</span>
     <span class="link" routerLink="/signup">Inscription</span>
