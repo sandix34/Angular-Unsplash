@@ -1,16 +1,23 @@
 import { Injectable } from "@angular/core";
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { TrySearchPhoto, PhotosActionTypes } from './photos.actions';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { PhotosService } from '../services/photos.service';
+import { Photo } from '../models/photo.model';
 
 @Injectable()
 export class PhotosEffects {
 
-  constructor(private actions$: Actions) {}
+  constructor(private actions$: Actions, private photoService: PhotosService) {}
 
   @Effect()
   trySearchPhoto$ = this.actions$.pipe(
     ofType<TrySearchPhoto>(PhotosActionTypes.TrySearchPhoto),
-    map((action: TrySearchPhoto) => action.payload)
+    map((action: TrySearchPhoto) => action.payload),
+    switchMap((payload: Photo) => {
+      console.log(payload) 
+      return this.photoService.searchPhotos(payload)
+      } 
+    )
   );
 }

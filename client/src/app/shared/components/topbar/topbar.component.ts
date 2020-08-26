@@ -13,6 +13,7 @@ import { TrySearchPhoto } from '../../../photos/shared/store/photos.actions';
   styleUrls: ['./topbar.component.css']
 })
 export class TopbarComponent implements OnInit {
+  public isLoggedIn$: Observable<boolean>;
   public searchForm: FormGroup;
 
   constructor(
@@ -21,6 +22,7 @@ export class TopbarComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.isLoggedIn$ = this.store.pipe(select(isLoggedInSelector));
     this.searchForm = this.fb.group({
       search: ''
     });
