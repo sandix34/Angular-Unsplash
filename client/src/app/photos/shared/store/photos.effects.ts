@@ -3,7 +3,6 @@ import { Effect, ofType, Actions } from '@ngrx/effects';
 import { TrySearchPhoto, PhotosActionTypes } from './photos.actions';
 import { map, switchMap } from 'rxjs/operators';
 import { PhotosService } from '../services/photos.service';
-import { Photo } from '../models/photo.model';
 
 @Injectable()
 export class PhotosEffects {
@@ -14,7 +13,7 @@ export class PhotosEffects {
   trySearchPhoto$ = this.actions$.pipe(
     ofType<TrySearchPhoto>(PhotosActionTypes.TrySearchPhoto),
     map((action: TrySearchPhoto) => action.payload),
-    switchMap((payload: Photo) => {
+    switchMap((payload) => {
       console.log(payload) 
       return this.photoService.searchPhotos(payload)
       } 
