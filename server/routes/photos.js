@@ -5,12 +5,16 @@ const unsplash = new Unsplash({ accessKey: unsplashKey });
 const toJson = require("unsplash-js").toJson;
 
 router.post('/', (req,res) => {
-  const photoSearch = req.body.search;
-  unsplash.search.photos(photoSearch, 1, 10, { orientation: "portrait" })
-  .then(toJson)
-  .then(photos => {
-    return res.send(photos);
-  });
+  try {
+    const photoSearch = req.body.search;
+    unsplash.search.photos(photoSearch, 1, 10, { orientation: "portrait" })
+    .then(toJson)
+    .then(photos => {
+      return res.send(photos);
+    });
+  } catch(error) {
+    console.log(error);
+  } 
 })
 
 module.exports = router;
