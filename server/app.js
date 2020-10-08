@@ -9,6 +9,9 @@ dotenv.config ();
 const db = process.env.MONGODB_CONNECT
 const index = require('./routes/index');
 
+const fetch = require('node-fetch');
+global.fetch = fetch;
+
 const app = express();
 
 app.use(logger('dev'));

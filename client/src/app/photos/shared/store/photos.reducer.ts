@@ -1,21 +1,20 @@
-import { PhotosActions, PhotosActionTypes } from './photos.actions';
+import { Photo } from '../models/photo.model';
+import { PhotosActions, PhotosActionTypes } from 'src/app/photos/shared/store/photos.actions';
 
 export interface PhotosState {
-  photos: any[];
-  filter: string;
-};
+  photo: Photo;
+}
 
 export const initialPhotosState: PhotosState = {
-  photos: null,
-  filter: null
-};
+  photo: null
+}
 
 export function photosReducer(state: PhotosState = initialPhotosState, action: PhotosActions): PhotosState {
   switch (action.type) {
-    case PhotosActionTypes.SetFilter: {
+    case PhotosActionTypes.TrySearchPhoto: {
       return {
         ...state,
-        filter: action.payload
+        photo: action.payload
       }
     }
   }
